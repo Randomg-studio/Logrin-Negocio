@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Chat · Kivo</title>
+<meta name="description" content="Escríbenos: te atiende el asistente virtual del negocio.">
+<style>
+  html, body { margin: 0; height: 100%; background: #F4F6FB; color: #102449; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .estado { min-height: 100%; display: grid; place-items: center; padding: 24px; box-sizing: border-box; text-align: center; }
+  .estado p { max-width: 320px; line-height: 1.5; margin: 0; }
+  .estado small { display: block; margin-top: 10px; color: #69708C; }
+</style>
+</head>
+<body>
+<div class="estado" id="estado"><p>Abriendo el chat…</p></div>
+<script>
+/* Link propio de Kivo Agentes: logrin.flexgogroup.com/kivo/?n=enlace-del-negocio
+   Busca la clave del negocio por su enlace y abre el chat a pantalla completa. Si el negocio está apagado, lo dice. */
+(async () => {
+  const estado = document.getElementById('estado');
+  const aviso = (t) => { estado.hidden = false; estado.innerHTML = '<p></p>'; estado.firstChild.textContent = t; };
+  const enlace = (new URLSearchParams(location.search).get('n') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  if (!enlace) { aviso('Este enlace no está completo. Pide al negocio su link de chat.'); return; }
+  const KEY = 'sb_publishable_YvFAhbXHG1UxlXDnUny5Uw_sRVWE0Wv'; // clave pública de Logrin
+  let d = null;
+  try {
+    const r = await fetch('https://owtweebqlmoarbsvtiau.supabase.co/rest/v1/rpc/kivo_w_enlace', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY, Authorization: 'Bearer ' + KEY },
+      body: JSON.stringify({ p_enlace: enlace }),
+    });
+    d = r.ok ? await r.json() : null;
+  } catch { d = null; }
+  if (!d) { aviso('No se pudo conectar. Revisa tu internet y vuelve a intentarlo.'); return; }
+  if (!d.clave) { aviso('Este chat no está disponible en este momento.'); return; }
+  document.title = 'Chat · ' + d.nombre;
+  if (d.color) document.body.style.background = d.color + '14';
+  document.addEventListener('kivo:no-disponible', () => aviso('Este chat no está disponible en este momento.'));
+  const s = document.createElement('script');
+  s.src = '/kivo.js';
+  s.dataset.negocio = d.clave;
+  s.dataset.modo = 'pagina';
+  s.onload = () => { estado.hidden = true; };
+  s.onerror = () => aviso('No se pudo abrir el chat. Vuelve a intentarlo.');
+  document.body.appendChild(s);
+})();
+</script>
+</body>
+</html>
