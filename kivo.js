@@ -1,5 +1,6 @@
 /* Kivo Agentes · chat para la web de los clientes de FlexGo.
    Uso: <script src="https://logrin.flexgogroup.com/kivo.js" data-negocio="CLAVE" defer></script>
+   data-color="#B5371F" cambia el color (si no, usa el del negocio). data-modo="pagina" lo muestra a pantalla completa (link propio).
    Todo lo importante pasa en el servidor: si el cliente está apagado o la web no es suya, el chat no aparece. */
 (() => {
   const script = document.currentScript;
@@ -10,7 +11,7 @@
   const URL = 'https://owtweebqlmoarbsvtiau.supabase.co/rest/v1/rpc/';
   const KEY = 'sb_publishable_YvFAhbXHG1UxlXDnUny5Uw_sRVWE0Wv'; // clave pública de Logrin
   const GUARDADO = 'kivo-ag-' + clave;
-  const color = (script.dataset.color || '#102449').replace(/[^#a-zA-Z0-9(),.% ]/g, '');
+  const pagina = script.dataset.modo === 'pagina';
 
   const rpc = async (fn, args) => {
     const r = await fetch(URL + fn, {
@@ -30,7 +31,8 @@
   const iniciar = async () => {
     let info;
     try { info = await rpc('kivo_w_iniciar', { p_clave: clave }); } catch { return; }
-    if (!info || !info.disponible) return;
+    if (!info || !info.disponible) { if (pagina) document.dispatchEvent(new CustomEvent('kivo:no-disponible')); return; }
+    const color = (script.dataset.color || info.color || '#102449').replace(/[^#a-zA-Z0-9(),.% ]/g, '');
 
     const host = document.createElement('div');
     host.setAttribute('data-kivo-agentes', '');
@@ -62,6 +64,9 @@
         form button:disabled { opacity: .5; cursor: default; }
         .pie { text-align: center; font-size: 11px; color: #8A97AA; padding: 0 0 8px; background: #fff; }
         .pie a { color: inherit; }
+        ${pagina ? `.lanzar, header button { display: none; }
+        .panel { inset: 0; right: 0; bottom: 0; width: 100%; height: 100%; max-width: none; border-radius: 0; box-shadow: none; }
+        @media (min-width: 720px) { .panel { inset: 24px auto; left: 50%; transform: translateX(-50%); width: 640px; height: calc(100% - 48px); border-radius: 16px; box-shadow: 0 18px 48px rgba(16,36,73,.18); } }` : ''}
       </style>
       <button class="lanzar" type="button" aria-label="Abrir el chat" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg>
@@ -146,8 +151,9 @@
     };
 
     lanzar.addEventListener('click', () => abrir(true));
+    if (pagina) abrir(true);
     $('header button').addEventListener('click', () => abrir(false));
-    root.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) abrir(false); });
+    root.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden && !pagina) abrir(false); });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const texto = input.value.trim();
