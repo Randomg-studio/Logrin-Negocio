@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prueba a Kivo con tu negocio · FlexGo</title>
+<meta name="description" content="Crea en un minuto el asistente de IA de tu negocio y chatea con él: toma pedidos, agenda citas y te avisa de los clientes listos para comprar.">
+<meta property="og:title" content="Prueba a Kivo con tu propio negocio">
+<meta property="og:description" content="El asistente de IA que atiende tu WhatsApp, tu web y tus redes. Pruébalo gratis en un minuto.">
+<meta property="og:image" content="https://logrin.flexgogroup.com/kivo/probar/kivo.webp">
+<meta name="theme-color" content="#0E1E3F">
+<link rel="icon" href="kivo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tinta: #0E1E3F; --tinta2: #1B2F5C; --papel: #FBF7F1; --linea: #E7DFD3; --suave: #6B6F80;
+    --naranja: #E8642C; --naranja2: #FFEDE3; --verde: #1F8A5B; --verde2: #E3F4EB; --azul: #2F5BD3; --azul2: #E7EDFF;
+    --rojo: #C8442F; --sombra: 0 18px 50px -24px rgba(14, 30, 63, .35);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--papel); color: var(--tinta); font-family: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { min-height: 100vh; background-image: radial-gradient(circle at 12% -10%, #FFE3D2 0, transparent 38%), radial-gradient(circle at 105% 20%, #DCE6FF 0, transparent 32%); }
+  h1, h2, h3, .marca b { font-family: "Bricolage Grotesque", "Figtree", sans-serif; letter-spacing: -.02em; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: inherit; }
+  .cab { display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(16px, 4vw, 40px); }
+  .marca { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .marca img { width: 38px; height: 38px; border-radius: 12px; background: var(--tinta); }
+  .marca b { font-size: 20px; } .marca small { display: block; color: var(--suave); font-size: 12px; margin-top: -2px; }
+  .cab a.wa { text-decoration: none; font-weight: 600; font-size: 14px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--linea); background: #fff; }
+  main { width: min(1180px, 100%); margin: 0 auto; padding: 8px clamp(16px, 4vw, 40px) 60px; }
+
+  /* Paso 1 */
+  .paso1 { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(20px, 4vw, 56px); align-items: start; padding-top: 18px; }
+  .hero .eti { display: inline-flex; gap: 8px; align-items: center; font-weight: 700; font-size: 13px; color: var(--naranja); background: var(--naranja2); padding: 6px 12px; border-radius: 999px; }
+  .hero h1 { font-size: clamp(36px, 5.4vw, 64px); line-height: .98; margin: 18px 0 16px; }
+  .hero h1 em { font-style: normal; color: var(--naranja); }
+  .hero p.lead { font-size: 18px; line-height: 1.55; color: #33405F; max-width: 30em; margin: 0 0 26px; }
+  .tres { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .tres li { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; background: rgba(255,255,255,.7); border: 1px solid var(--linea); border-radius: 16px; padding: 14px; }
+  .tres li span { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--tinta); color: #fff; font-size: 20px; }
+  .tres b { display: block; margin-bottom: 2px; } .tres small { color: var(--suave); line-height: 1.45; }
+  .tarjeta { background: #fff; border: 1px solid var(--linea); border-radius: 24px; box-shadow: var(--sombra); padding: clamp(18px, 3vw, 28px); }
+  .tarjeta h2 { margin: 0 0 4px; font-size: 24px; } .tarjeta > p { margin: 0 0 18px; color: var(--suave); }
+  .tipos { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .tipos label { position: relative; cursor: pointer; }
+  .tipos input { position: absolute; opacity: 0; inset: 0; }
+  .tipos span { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 10px 12px; border: 1.5px solid var(--linea); border-radius: 14px; font-weight: 600; font-size: 14px; transition: .15s; }
+  .tipos span i { font-style: normal; font-size: 20px; }
+  .tipos input:checked + span { border-color: var(--tinta); background: var(--tinta); color: #fff; }
+  .tipos input:focus-visible + span { outline: 3px solid var(--azul); outline-offset: 2px; }
+  .campo { display: grid; gap: 6px; margin-bottom: 12px; }
+  .campo label { font-weight: 600; font-size: 14px; } .campo label small { color: var(--suave); font-weight: 500; }
+  .campo input, .campo textarea { width: 100%; border: 1.5px solid var(--linea); border-radius: 12px; padding: 11px 13px; background: #FFFDFA; outline: none; }
+  .campo textarea { resize: vertical; min-height: 74px; line-height: 1.45; }
+  .campo input:focus, .campo textarea:focus { border-color: var(--azul); background: #fff; }
+  details.mas { margin: 4px 0 14px; } details.mas summary { cursor: pointer; color: var(--azul); font-weight: 600; font-size: 14px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 700; cursor: pointer; text-decoration: none; }
+  .btn.pri { background: var(--naranja); color: #fff; width: 100%; font-size: 16px; box-shadow: 0 10px 24px -12px var(--naranja); }
+  .btn.pri:disabled { opacity: .6; cursor: wait; }
+  .btn.sec { background: var(--tinta); color: #fff; } .btn.lig { background: #fff; border: 1px solid var(--linea); }
+  .error { color: var(--rojo); font-weight: 600; font-size: 14px; min-height: 20px; margin: 10px 0 0; }
+  .letra { font-size: 12.5px; color: var(--suave); margin-top: 10px; line-height: 1.45; }
+
+  /* Paso 2 */
+  .paso2 { display: none; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 20px; align-items: start; }
+  .paso2.on, .paso1.on { display: grid; } .paso1:not(.on) { display: none; }
+  .chat { display: flex; flex-direction: column; height: min(720px, calc(100vh - 120px)); min-height: 520px; background: #fff; border: 1px solid var(--linea); border-radius: 24px; box-shadow: var(--sombra); overflow: hidden; }
+  .chat header { display: flex; gap: 12px; align-items: center; padding: 14px 16px; background: var(--tinta); color: #fff; }
+  .chat header img { width: 40px; height: 40px; border-radius: 12px; background: #fff; }
+  .chat header b { display: block; font-size: 16px; } .chat header small { opacity: .75; font-size: 12.5px; }
+  .chat header .vivo { margin-left: auto; font-size: 12px; background: rgba(255,255,255,.12); padding: 5px 10px; border-radius: 999px; }
+  .msgs { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; background: #F6F3EE; }
+  .m { max-width: 82%; padding: 10px 13px; border-radius: 16px; line-height: 1.45; white-space: pre-wrap; word-wrap: break-word; animation: entra .25s ease; }
+  .m.kivo { background: #fff; border: 1px solid var(--linea); border-bottom-left-radius: 6px; align-self: flex-start; }
+  .m.yo { background: var(--tinta2); color: #fff; border-bottom-right-radius: 6px; align-self: flex-end; }
+  .m.sis { align-self: center; background: transparent; color: var(--suave); font-size: 13px; text-align: center; }
+  .escribe { align-self: flex-start; color: var(--suave); font-size: 13px; padding: 4px 6px; }
+  .escribe i { display: inline-block; width: 6px; height: 6px; margin: 0 1px; border-radius: 50%; background: var(--suave); animation: punto 1s infinite; }
+  .escribe i:nth-child(2) { animation-delay: .15s; } .escribe i:nth-child(3) { animation-delay: .3s; }
+  .ideas { display: flex; gap: 6px; padding: 10px 12px 0; overflow-x: auto; scrollbar-width: none; background: #fff; }
+  .ideas button { flex: none; border: 1px solid var(--linea); background: #FFFDFA; border-radius: 999px; padding: 7px 12px; font-size: 13px; cursor: pointer; }
+  .enviar { display: flex; gap: 8px; padding: 12px; background: #fff; }
+  .enviar input { flex: 1; border: 1.5px solid var(--linea); border-radius: 14px; padding: 12px 14px; outline: none; }
+  .enviar input:focus { border-color: var(--azul); }
+  .enviar button { border: 0; border-radius: 14px; background: var(--naranja); color: #fff; font-weight: 700; padding: 0 18px; cursor: pointer; }
+  .enviar button:disabled { opacity: .5; }
+  .lado { display: grid; gap: 14px; }
+  .caja { background: #fff; border: 1px solid var(--linea); border-radius: 20px; padding: 16px; }
+  .caja h3 { margin: 0 0 4px; font-size: 18px; } .caja > p { margin: 0 0 12px; color: var(--suave); font-size: 14px; }
+  .detras { background: var(--tinta); color: #fff; border: 0; }
+  .detras > p { color: #B9C2DA; }
+  .eventos { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 260px; overflow-y: auto; }
+  .eventos li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; background: rgba(255,255,255,.07); border-radius: 12px; padding: 10px; animation: entra .35s ease; }
+  .eventos li span { font-size: 18px; text-align: center; } .eventos li b { display: block; font-size: 14px; } .eventos li small { color: #B9C2DA; font-size: 12.5px; }
+  .eventos .vacio { display: block; color: #B9C2DA; font-size: 14px; background: none; padding: 4px 0; }
+  .ficha { display: grid; grid-template-columns: 74px 1fr; gap: 14px; align-items: center; }
+  .anillo { width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--c, var(--suave)) calc(var(--p, 0) * 1%), #EEE8DF 0); }
+  .anillo b { width: 58px; height: 58px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 20px; font-family: "Bricolage Grotesque", sans-serif; }
+  .ficha dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 13.5px; }
+  .ficha dt { color: var(--suave); } .ficha dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+  .pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+  .pill.caliente { background: #FFE5DC; color: #B53A17; } .pill.tibio { background: #FFF2D6; color: #9A6400; } .pill.frio { background: var(--azul2); color: var(--azul); }
+  .cta { background: linear-gradient(140deg, #FFF3EB, #fff 55%); border-color: #F6CDB6; }
+  .planes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 12px; }
+  .planes div { border: 1px solid var(--linea); border-radius: 14px; padding: 10px; background: #fff; text-align: center; }
+  .planes b { display: block; font-family: "Bricolage Grotesque", sans-serif; font-size: 18px; } .planes small { color: var(--suave); font-size: 12px; }
+  .lead { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+  .lead input { border: 1.5px solid var(--linea); border-radius: 12px; padding: 10px 12px; min-width: 0; }
+  .ok { color: var(--verde); font-weight: 700; font-size: 14px; }
+  .pie { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; color: var(--suave); font-size: 13px; margin-top: 4px; }
+  .pie button { background: none; border: 0; color: var(--azul); font-weight: 600; cursor: pointer; padding: 0; }
+  @keyframes entra { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes punto { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  @media (max-width: 900px) {
+    .paso1.on, .paso2.on { grid-template-columns: 1fr; }
+    .chat { height: 72vh; min-height: 460px; }
+    .lead { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="cab">
+  <a class="marca" href="https://flexgogroup.com"><img src="kivo.webp" alt=""><span><b>Kivo</b><small>IA de FlexGo Group</small></span></a>
+  <a class="wa" id="wa-top" href="https://wa.me/51917952528" target="_blank" rel="noopener">WhatsApp 917 952 528</a>
+</header>
+<main>
+  <section class="paso1 on" id="paso1">
+    <div class="hero">
+      <span class="eti">● Demo gratis · 1 minuto</span>
+      <h1>Prueba a Kivo con <em>tu propio</em> negocio.</h1>
+      <p class="lead">Cuéntale qué vendes y chatea con él como si fueras tu cliente. Verás cómo atiende, toma pedidos, agenda citas y te avisa de quién está listo para comprar.</p>
+      <ul class="tres">
+        <li><span>💬</span><div><b>Atiende al instante, 24/7</b><small>En tu WhatsApp, tu web, Instagram y Messenger. Con tus precios y tu horario, sin inventar nada.</small></div></li>
+        <li><span>📋</span><div><b>Anota pedidos y citas</b><small>Pide nombre y celular, deja todo listo y tú solo confirmas.</small></div></li>
+        <li><span>🔥</span><div><b>Te dice quién va a comprar</b><small>Califica a cada persona de 0 a 100 para que atiendas primero a los calientes.</small></div></li>
+      </ul>
+    </div>
+    <form class="tarjeta" id="form" autocomplete="off" novalidate>
+      <h2>Tu negocio</h2>
+      <p>Con esto Kivo aprende a atenderte. Escribe como hablarías con un cliente.</p>
+      <div class="tipos" role="radiogroup" aria-label="Tipo de negocio" id="tipos"></div>
+      <div class="campo"><label for="f-nombre">Nombre del negocio</label><input id="f-nombre" maxlength="60" placeholder="Pollería Don Pepe" required></div>
+      <div class="campo"><label for="f-vende">¿Qué vendes u ofreces?</label><textarea id="f-vende" maxlength="600" placeholder="Pollo a la brasa, parrillas, gaseosas y chicha. Delivery en Surco y Miraflores." required></textarea></div>
+      <div class="campo"><label for="f-precios">Precios o planes <small>(uno por línea)</small></label><textarea id="f-precios" maxlength="1500" placeholder="1/4 de pollo con papas S/ 18&#10;Pollo entero S/ 62"></textarea></div>
+      <div class="campo"><label for="f-horario">Horario de atención</label><input id="f-horario" maxlength="200" placeholder="Lunes a domingo de 12 a 11 pm"></div>
+      <details class="mas"><summary>Agregar dirección y formas de pago (opcional)</summary>
+        <div class="campo" style="margin-top:10px"><label for="f-direccion">Dirección</label><input id="f-direccion" maxlength="150" placeholder="Av. Primavera 123, Surco"></div>
+        <div class="campo"><label for="f-pagos">Delivery y formas de pago</label><input id="f-pagos" maxlength="400" placeholder="Yape, Plin y efectivo. Delivery S/ 5."></div>
+      </details>
+      <button class="btn pri" id="crear" type="submit">Crear mi asistente y probarlo →</button>
+      <p class="error" id="error" role="alert"></p>
+      <p class="letra">Es una demo: tu negocio de prueba y su chat se borran solos en 24 horas. No enviamos mensajes a nadie.</p>
+    </form>
+  </section>
+
+  <section class="paso2" id="paso2" aria-live="polite">
+    <div class="chat">
+      <header><img src="kivo.webp" alt=""><div><b id="c-nombre">Tu negocio</b><small>Asistente con IA · Kivo</small></div><span class="vivo" id="c-rest"></span></header>
+      <div class="msgs" id="msgs"></div>
+      <div class="ideas" id="ideas"></div>
+      <form class="enviar" id="enviar"><input id="texto" maxlength="1000" placeholder="Escribe como si fueras tu cliente…" aria-label="Mensaje"><button id="btn-enviar" type="submit">Enviar</button></form>
+    </div>
+    <div class="lado">
+      <div class="caja detras">
+        <h3>Lo que pasa detrás</h3>
+        <p>Esto es lo que verías tú, el dueño, mientras Kivo atiende.</p>
+        <ul class="eventos" id="eventos"><li class="vacio">Escríbele a Kivo: aquí aparecerán la ficha del cliente, los pedidos y los avisos.</li></ul>
+      </div>
+      <div class="caja" id="caja-ficha" hidden>
+        <h3>Ficha del cliente</h3>
+        <p>Kivo la llena solo mientras conversa.</p>
+        <div class="ficha"><div class="anillo" id="anillo"><b id="puntaje">0</b></div><dl id="ficha"></dl></div>
+      </div>
+      <div class="caja cta">
+        <h3>¿Te gustó? Actívalo en tu negocio</h3>
+        <p>El mismo Kivo, con tu información real, en tu WhatsApp, tu web y tus redes.</p>
+        <div class="planes"><div><b>S/ 70</b><small>Recurrente</small></div><div><b>S/ 145</b><small>Pro</small></div><div><b>S/ 250</b><small>Ultra</small></div></div>
+        <a class="btn sec" id="wa-cta" href="https://wa.me/51917952528" target="_blank" rel="noopener" style="width:100%">Escribir por WhatsApp al 917 952 528</a>
+        <p style="margin:14px 0 8px;font-size:14px;color:var(--suave)">O déjanos tus datos y te escribimos:</p>
+        <form class="lead" id="lead"><input id="l-nombre" maxlength="80" placeholder="Tu nombre" aria-label="Tu nombre"><input id="l-cel" maxlength="20" inputmode="tel" placeholder="Tu WhatsApp" aria-label="Tu WhatsApp"><button class="btn lig" type="submit">Enviar</button></form>
+        <p class="error" id="l-error" role="alert"></p>
+      </div>
+      <div class="pie"><span id="c-hasta"></span><button type="button" id="otro">Probar con otro negocio</button></div>
+    </div>
+  </section>
+</main>
+<script>
+/* Demo pública «Probar a Kivo» (R-121). Crea un negocio temporal (24 h) con kivo_demo_crear y conversa con el mismo Kivo
+   de siempre (kivo_w_enviar / kivo_w_leer). kivo_demo_eventos cuenta lo que pasa detrás: ficha, pedidos y avisos.
+   Todo texto que viene del servidor o del visitante se pinta con textContent. */
+(() => {
+  const URL = 'https://owtweebqlmoarbsvtiau.supabase.co/rest/v1/rpc/';
+  const KEY = 'sb_publishable_YvFAhbXHG1UxlXDnUny5Uw_sRVWE0Wv'; // clave pública de Logrin
+  const GUARDA = 'kivo-demo-v1';
+  const $ = (s) => document.querySelector(s);
+  const TIPOS = [
+    ['restaurante', '🍽️', 'Restaurante', ['¿Qué tienen hoy?', 'Quiero 2 menús para delivery', 'Reservar mesa para 4 el sábado a las 8']],
+    ['tienda', '🛍️', 'Tienda', ['¿Tienen stock?', '¿Cuánto cuesta y hacen envíos?', 'Quiero comprar 2']],
+    ['consultorio', '🩺', 'Consultorio', ['¿Cuánto cuesta la consulta?', 'Quiero una cita para mañana', '¿Atienden sábados?']],
+    ['belleza', '💇', 'Belleza o spa', ['¿Precio de corte y tinte?', 'Quiero reservar para el viernes', '¿Dónde quedan?']],
+    ['servicios', '🛠️', 'Servicios', ['Necesito una cotización', '¿Pueden venir esta semana?', '¿Cómo pago?']],
+    ['academia', '🎓', 'Academia', ['¿Qué cursos tienen?', '¿Horarios y precio?', 'Quiero inscribirme']],
+    ['otro', '✨', 'Otro', ['¿Qué ofrecen?', '¿Precios?', 'Quiero hablar con alguien']],
+  ];
+  const TIPO_TXT = { pedido: 'Pedido', cita: 'Cita', asesor: 'Quiere hablar con una persona', reclamo: 'Reclamo', consulta: 'Consulta' };
+  const URG_TXT = { hoy: 'Hoy', semana: 'Esta semana', mes: 'Este mes', sin_apuro: 'Sin apuro' };
+
+  const rpc = async (fn, args) => {
+    const r = await fetch(URL + fn, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY, Authorization: 'Bearer ' + KEY }, body: JSON.stringify(args) });
+    const t = await r.text(); let d = null; try { d = t ? JSON.parse(t) : null; } catch { d = null; }
+    if (!r.ok) throw new Error((d && d.message) || 'No se pudo conectar. Revisa tu internet e inténtalo de nuevo.');
+    return d;
+  };
+  const leer = () => { try { return JSON.parse(localStorage.getItem(GUARDA) || 'null'); } catch { return null; } };
+  const guardar = (v) => { try { v ? localStorage.setItem(GUARDA, JSON.stringify(v)) : localStorage.removeItem(GUARDA); } catch { /* sin almacenamiento */ } };
+
+  // Paso 1: tipos
+  const tipos = $('#tipos');
+  TIPOS.forEach(([v, ic, t], i) => {
+    const l = document.createElement('label');
+    l.innerHTML = `<input type="radio" name="rubro" value="${v}"${i === 0 ? ' checked' : ''}><span><i>${ic}</i></span>`;
+    l.querySelector('span').append(t);
+    tipos.append(l);
+  });
+
+  let D = leer(), desde = 0, esperando = false, sondeo = null, visto = { ficha: null, acc: 0, aviso: false, datos: false };
+
+  $('#form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = $('#error'); err.textContent = '';
+    const p = { nombre: $('#f-nombre').value.trim(), rubro: (document.querySelector('input[name=rubro]:checked') || {}).value || 'otro',
+      vende: $('#f-vende').value.trim(), precios: $('#f-precios').value.trim(), horario: $('#f-horario').value.trim(),
+      direccion: $('#f-direccion').value.trim(), pagos: $('#f-pagos').value.trim() };
+    if (p.nombre.length < 2) { err.textContent = 'Escribe el nombre de tu negocio.'; $('#f-nombre').focus(); return; }
+    if (p.vende.length < 3) { err.textContent = 'Cuéntale a Kivo qué vendes u ofreces.'; $('#f-vende').focus(); return; }
+    const b = $('#crear'); b.disabled = true; b.textContent = 'Creando tu asistente…';
+    try {
+      const r = await rpc('kivo_demo_crear', { p });
+      D = { clave: r.clave, nombre: r.nombre, saludo: r.saludo, hasta: r.hasta, rubro: r.rubro, chat: null, token: null, lead: false };
+      guardar(D); abrirChat(true);
+    } catch (x) { err.textContent = x.message; }
+    b.disabled = false; b.textContent = 'Crear mi asistente y probarlo →';
+  });
+
+  // Paso 2: chat
+  const msgs = $('#msgs');
+  const burbuja = (de, texto) => {
+    const d = document.createElement('div'); d.className = 'm ' + (de === 'visitante' ? 'yo' : de === 'kivo' ? 'kivo' : 'sis');
+    d.textContent = texto; msgs.append(d); msgs.scrollTop = msgs.scrollHeight; return d;
+  };
+  let pensando = null;
+  const pensar = (on) => {
+    if (on && !pensando) { pensando = document.createElement('div'); pensando.className = 'escribe'; pensando.innerHTML = 'Kivo está escribiendo <i></i><i></i><i></i>'; msgs.append(pensando); msgs.scrollTop = msgs.scrollHeight; }
+    if (!on && pensando) { pensando.remove(); pensando = null; }
+  };
+  function abrirChat(nuevo) {
+    $('#paso1').classList.remove('on'); $('#paso2').classList.add('on');
+    $('#c-nombre').textContent = D.nombre;
+    const fin = new Date(D.hasta);
+    $('#c-hasta').textContent = 'Tu demo se borra sola el ' + fin.toLocaleString('es-PE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) + '.';
+    msgs.textContent = ''; desde = 0; visto = { ficha: null, acc: 0, aviso: false, datos: false };
+    $('#eventos').innerHTML = '<li class="vacio">Escríbele a Kivo: aquí aparecerán la ficha del cliente, los pedidos y los avisos.</li>';
+    $('#caja-ficha').hidden = true;
+    burbuja('kivo', D.saludo);
+    const ideas = $('#ideas'); ideas.textContent = '';
+    ((TIPOS.find((t) => t[0] === D.rubro) || TIPOS[6])[3]).forEach((t) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t; b.onclick = () => enviar(t); ideas.append(b); });
+    const wa = 'https://wa.me/51917952528?text=' + encodeURIComponent('Hola, probé a Kivo con «' + D.nombre + '» y quiero activarlo en mi negocio.');
+    $('#wa-cta').href = wa;
+    if (D.lead) marcarLead();
+    if (!nuevo && D.chat) { leerMensajes(); eventos(); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => $('#texto').focus(), 200);
+  }
+  async function enviar(t) {
+    t = String(t || '').trim(); if (!t || esperando) return;
+    $('#texto').value = ''; burbuja('visitante', t); esperando = true; $('#btn-enviar').disabled = true; pensar(true);
+    try {
+      const r = await rpc('kivo_w_enviar', { p_clave: D.clave, p_chat: D.chat, p_texto: t, p_token: D.token });
+      if (!D.chat) { D.chat = r.chat; D.token = r.token; guardar(D); }
+      sondear();
+    } catch (x) { pensar(false); burbuja('sistema', x.message); esperando = false; $('#btn-enviar').disabled = false; }
+  }
+  $('#enviar').addEventListener('submit', (e) => { e.preventDefault(); enviar($('#texto').value); });
+  async function leerMensajes() {
+    if (!D.chat) return false;
+    const r = await rpc('kivo_w_leer', { p_chat: D.chat, p_token: D.token, p_desde: desde });
+    let kivo = false;
+    (r.mensajes || []).forEach((m) => { desde = Math.max(desde, m.id); if (m.de === 'visitante' && esperando) return; if (m.de !== 'visitante') kivo = true; burbuja(m.de, m.texto); });
+    return { kivo, pensando: !!r.pensando, fin: !!r.fin };
+  }
+  function sondear() {
+    clearTimeout(sondeo); let n = 0;
+    const paso = async () => {
+      n++;
+      try {
+        const r = await leerMensajes();
+        if (r && (r.kivo || r.fin) && !r.pensando) { pensar(false); esperando = false; $('#btn-enviar').disabled = false; $('#texto').focus(); eventos(); return; }
+        if (r && r.pensando) pensar(true);
+      } catch { /* reintenta */ }
+      if (n < 40) sondeo = setTimeout(paso, n < 10 ? 1200 : 2500);
+      else { pensar(false); esperando = false; $('#btn-enviar').disabled = false; burbuja('sistema', 'Kivo está tardando. Vuelve a escribir en un momento.'); }
+    };
+    sondeo = setTimeout(paso, 900);
+  }
+
+  // Lo que pasa detrás
+  const ev = (icono, titulo, detalle) => {
+    const ul = $('#eventos'); const v = ul.querySelector('.vacio'); if (v) v.remove();
+    const li = document.createElement('li'); li.innerHTML = '<span></span><div><b></b><small></small></div>';
+    li.querySelector('span').textContent = icono; li.querySelector('b').textContent = titulo; li.querySelector('small').textContent = detalle || '';
+    ul.prepend(li);
+  };
+  async function eventos() {
+    let r; try { r = await rpc('kivo_demo_eventos', { p_clave: D.clave, p_chat: D.chat, p_token: D.token }); } catch { return; }
+    if (!r) return;
+    if (r.fin) { burbuja('sistema', 'Esta demo ya terminó. Crea otra con «Probar con otro negocio».'); $('#texto').disabled = true; return; }
+    $('#c-rest').textContent = r.restantes + ' respuestas de prueba';
+    if (r.restantes <= 0) { $('#texto').disabled = true; $('#texto').placeholder = 'Se acabaron las respuestas de prueba. ¡Actívalo en tu negocio!'; }
+    const f = r.ficha;
+    if (f) {
+      const ant = visto.ficha;
+      if (!ant) ev('📝', 'Ficha del cliente creada', 'Kivo detectó: ' + (TIPO_TXT[f.tipo] || f.tipo) + (f.producto ? ' · ' + f.producto : ''));
+      if ((f.nombre || f.celular) && !visto.datos) { visto.datos = true; ev('👤', 'Datos del cliente guardados', [f.nombre, f.celular].filter(Boolean).join(' · ')); }
+      if (!ant || ant.etapa !== f.etapa || Math.abs((ant.puntaje || 0) - (f.puntaje || 0)) >= 10) {
+        const ic = f.etapa === 'caliente' ? '🔥' : f.etapa === 'tibio' ? '🌤️' : '❄️';
+        ev(ic, 'Cliente ' + f.etapa + ': ' + f.puntaje, f.etapa === 'caliente' ? 'Listo para comprar: atiéndelo primero.' : 'Kivo sigue conversando para entender qué necesita.');
+      }
+      visto.ficha = f; pintarFicha(f);
+    }
+    const acc = r.acciones || [];
+    acc.slice(visto.acc).forEach((a) => {
+      const fecha = a.fecha ? ' · ' + new Date(a.fecha).toLocaleString('es-PE', { weekday: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+      if (a.tipo === 'pedido') ev('📋', 'Pedido anotado', a.detalle + fecha);
+      else if (a.tipo === 'cita') ev('📅', 'Cita agendada', a.detalle + fecha);
+      else ev('🧾', 'Caso registrado', a.detalle);
+    });
+    visto.acc = acc.length;
+    if (r.aviso && !visto.aviso) { visto.aviso = true; ev('✉️', 'Aviso enviado al negocio', 'Te llegaría por correo y a tu panel para que lo confirmes (en la demo no se envía).'); }
+  }
+  function pintarFicha(f) {
+    $('#caja-ficha').hidden = false;
+    const color = f.etapa === 'caliente' ? '#E8642C' : f.etapa === 'tibio' ? '#E0A100' : '#2F5BD3';
+    const an = $('#anillo'); an.style.setProperty('--p', Math.max(0, Math.min(100, Number(f.puntaje) || 0))); an.style.setProperty('--c', color);
+    $('#puntaje').textContent = Number(f.puntaje) || 0;
+    const dl = $('#ficha'); dl.textContent = '';
+    const fila = (k, v) => { if (!v) return; const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); };
+    const et = document.createElement('dd'); const sp = document.createElement('span'); sp.className = 'pill ' + f.etapa; sp.textContent = f.etapa; et.append(sp);
+    const dt = document.createElement('dt'); dt.textContent = 'Estado'; dl.append(dt, et);
+    fila('Quiere', TIPO_TXT[f.tipo] || f.tipo); fila('Nombre', f.nombre); fila('Celular', f.celular); fila('Producto', f.producto);
+    fila('Para', URG_TXT[f.urgencia] || f.urgencia); fila('Presupuesto', f.presupuesto); fila('Resumen', f.detalle);
+  }
+
+  // ¿Te gustó?
+  function marcarLead() { $('#lead').innerHTML = '<p class="ok">¡Listo! Te escribiremos pronto por WhatsApp.</p>'; }
+  $('#lead').addEventListener('submit', async (e) => {
+    e.preventDefault(); const er = $('#l-error'); er.textContent = '';
+    if (!D.chat) { er.textContent = 'Primero conversa un poco con Kivo.'; return; }
+    try { await rpc('kivo_demo_lead', { p_clave: D.clave, p_chat: D.chat, p_token: D.token, p_nombre: $('#l-nombre').value, p_celular: $('#l-cel').value });
+      D.lead = true; guardar(D); marcarLead(); ev('🤝', 'Recibimos tus datos', 'Un asesor de FlexGo te escribirá por WhatsApp.');
+    } catch (x) { er.textContent = x.message; }
+  });
+  $('#otro').addEventListener('click', () => { guardar(null); D = null; clearTimeout(sondeo); esperando = false; pensar(false); $('#texto').disabled = false; $('#btn-enviar').disabled = false;
+    $('#paso2').classList.remove('on'); $('#paso1').classList.add('on'); $('#f-nombre').focus(); });
+
+  // Si ya tenía una demo viva, sigue donde estaba
+  if (D && D.clave && new Date(D.hasta) > new Date()) abrirChat(false); else { guardar(null); D = null; }
+})();
+</script>
+</body>
+</html>
